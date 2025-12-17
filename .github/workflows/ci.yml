@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    name: "CI"
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: actions/setup-python@v6
+      with:
+        python-version: '3.14'
+    - name: Install pipenv
+      run: pip install pipenv
+    - name: Verify Pipfile.lock
+      run: pipenv verify
+    - name: Install dependencies
+      run: pipenv install --dev
+    - name: Run pylint
+      run: pipenv run pylint src/
+    - name: Check for security vulnerabilities
+      run: pipenv scan
